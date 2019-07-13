@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huangchenming.mapper.ShopMapper">
+	<select id="getListAll" resultType="map" parameterType="map">
+		select s.*,GROUP_CONCAT(g.gname) ggname from shop s 
+		LEFT JOIN gosh gs on s.sid = gs.sid
+		left join goods g on gs.gid = g.gid
+		<where>
+			<if test=" mh != null and mh !=''">
+				and s.sname like concat('%',#{mh},'%')
+			</if>
+		</where>
+		group by s.sid
+	</select>
+	
+	<select id="getListGoods" resultType="map" parameterType="map">
+		select * from goods
+	</select>
+	
+	<select id="selectShop" parameterType="int" resultType="map">
+		select * from shop where sid = #{sid}
+	</select>
+	
+	<insert id="addShop" parameterType="shop">
+		insert into shop(sid,sname,sdate) values(#{sid},#{sname},#{sdate})
+	</insert>
+	<insert id="addGosh" parameterType="map">
+		insert into gosh(gid,sid) values
+		<foreach collection="gids" item="gid" separator=",">
+			(#{gid},#{sid})
+		</foreach>
+	</insert>
+	<select id="ckShop" parameterType="int" resultType="shop">
+		select * from shop where sid = #{sid}
+	</select>
+	<select id="selectGosh" parameterType="int" resultType="int">
+		select gid from gosh where sid = #{sid}
+	</select>
+	
+	<delete id="deleteShop" parameterType="map">
+		delete from shop where sid in 
+		<foreach collection="sid" item="s" open="(" close=")" separator=",">
+			#{s}
+		</foreach>
+	</delete>
+	<delete id="deletGosh" parameterType="map">
+		delete gosh shop where sid in 
+		<foreach collection="sid" item="s" open="(" close=")" separator=",">
+			#{s}
+		</foreach>
+	</delete>
+</mapper>
