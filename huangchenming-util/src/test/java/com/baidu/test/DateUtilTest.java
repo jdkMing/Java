@@ -15,7 +15,7 @@ public class DateUtilTest {
 
 	@Test
 	public void test() {
-		System.out.println(DateUtil.getAge(new Date(1998,07,17)));
+		System.out.println(DateUtil.getAge(new Date(1997,10,11)));
 	}
 	@Test
 	public void test2() {
